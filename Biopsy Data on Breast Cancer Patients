@@ -1,0 +1,1028 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMv8QLtO2IXg1mnlynyw+an",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "ir",
+      "display_name": "R"
+    },
+    "language_info": {
+      "name": "R"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/leticialandim/python_leticia/blob/master/Biopsy%20Data%20on%20Breast%20Cancer%20Patients\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "ZOoCSorXietN"
+      },
+      "source": [
+        "\n",
+        "\n",
+        "*   NOME: LETICIA ALVES PAES LANDIM\n",
+        "*   MATRÍCULA: 10992059309\n",
+        "*   EAD_MACKENZIE_HIGIENOPOLIS\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "6N6WGNm1aMv5"
+      },
+      "source": [
+        "## **A1 Biopsy Data on Breast Cancer Patients**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "BcDc55vcaPlk"
+      },
+      "source": [
+        "library(class)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "8ltC9QRPaVUK"
+      },
+      "source": [
+        "library(MASS)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 283
+        },
+        "id": "c6yuody3aXRu",
+        "outputId": "860c2ef4-a644-4f5f-c048-222086c56c83"
+      },
+      "source": [
+        "head(biopsy)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "  ID      V1 V2 V3 V4 V5 V6 V7 V8 V9 class    \n",
+              "1 1000025 5   1  1 1  2   1 3  1  1  benign   \n",
+              "2 1002945 5   4  4 5  7  10 3  2  1  benign   \n",
+              "3 1015425 3   1  1 1  2   2 3  1  1  benign   \n",
+              "4 1016277 6   8  8 1  3   4 3  7  1  benign   \n",
+              "5 1017023 4   1  1 3  2   1 3  1  1  benign   \n",
+              "6 1017122 8  10 10 8  7  10 9  7  1  malignant"
+            ],
+            "text/latex": "A data.frame: 6 × 11\n\\begin{tabular}{r|lllllllllll}\n  & ID & V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & class\\\\\n  & <chr> & <int> & <int> & <int> & <int> & <int> & <int> & <int> & <int> & <int> & <fct>\\\\\n\\hline\n\t1 & 1000025 & 5 &  1 &  1 & 1 & 2 &  1 & 3 & 1 & 1 & benign   \\\\\n\t2 & 1002945 & 5 &  4 &  4 & 5 & 7 & 10 & 3 & 2 & 1 & benign   \\\\\n\t3 & 1015425 & 3 &  1 &  1 & 1 & 2 &  2 & 3 & 1 & 1 & benign   \\\\\n\t4 & 1016277 & 6 &  8 &  8 & 1 & 3 &  4 & 3 & 7 & 1 & benign   \\\\\n\t5 & 1017023 & 4 &  1 &  1 & 3 & 2 &  1 & 3 & 1 & 1 & benign   \\\\\n\t6 & 1017122 & 8 & 10 & 10 & 8 & 7 & 10 & 9 & 7 & 1 & malignant\\\\\n\\end{tabular}\n",
+            "text/markdown": "\nA data.frame: 6 × 11\n\n| <!--/--> | ID &lt;chr&gt; | V1 &lt;int&gt; | V2 &lt;int&gt; | V3 &lt;int&gt; | V4 &lt;int&gt; | V5 &lt;int&gt; | V6 &lt;int&gt; | V7 &lt;int&gt; | V8 &lt;int&gt; | V9 &lt;int&gt; | class &lt;fct&gt; |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n| 1 | 1000025 | 5 |  1 |  1 | 1 | 2 |  1 | 3 | 1 | 1 | benign    |\n| 2 | 1002945 | 5 |  4 |  4 | 5 | 7 | 10 | 3 | 2 | 1 | benign    |\n| 3 | 1015425 | 3 |  1 |  1 | 1 | 2 |  2 | 3 | 1 | 1 | benign    |\n| 4 | 1016277 | 6 |  8 |  8 | 1 | 3 |  4 | 3 | 7 | 1 | benign    |\n| 5 | 1017023 | 4 |  1 |  1 | 3 | 2 |  1 | 3 | 1 | 1 | benign    |\n| 6 | 1017122 | 8 | 10 | 10 | 8 | 7 | 10 | 9 | 7 | 1 | malignant |\n\n",
+            "text/html": [
+              "<table class=\"dataframe\">\n",
+              "<caption>A data.frame: 6 × 11</caption>\n",
+              "<thead>\n",
+              "\t<tr><th></th><th scope=col>ID</th><th scope=col>V1</th><th scope=col>V2</th><th scope=col>V3</th><th scope=col>V4</th><th scope=col>V5</th><th scope=col>V6</th><th scope=col>V7</th><th scope=col>V8</th><th scope=col>V9</th><th scope=col>class</th></tr>\n",
+              "\t<tr><th></th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;fct&gt;</th></tr>\n",
+              "</thead>\n",
+              "<tbody>\n",
+              "\t<tr><th scope=row>1</th><td>1000025</td><td>5</td><td> 1</td><td> 1</td><td>1</td><td>2</td><td> 1</td><td>3</td><td>1</td><td>1</td><td>benign   </td></tr>\n",
+              "\t<tr><th scope=row>2</th><td>1002945</td><td>5</td><td> 4</td><td> 4</td><td>5</td><td>7</td><td>10</td><td>3</td><td>2</td><td>1</td><td>benign   </td></tr>\n",
+              "\t<tr><th scope=row>3</th><td>1015425</td><td>3</td><td> 1</td><td> 1</td><td>1</td><td>2</td><td> 2</td><td>3</td><td>1</td><td>1</td><td>benign   </td></tr>\n",
+              "\t<tr><th scope=row>4</th><td>1016277</td><td>6</td><td> 8</td><td> 8</td><td>1</td><td>3</td><td> 4</td><td>3</td><td>7</td><td>1</td><td>benign   </td></tr>\n",
+              "\t<tr><th scope=row>5</th><td>1017023</td><td>4</td><td> 1</td><td> 1</td><td>3</td><td>2</td><td> 1</td><td>3</td><td>1</td><td>1</td><td>benign   </td></tr>\n",
+              "\t<tr><th scope=row>6</th><td>1017122</td><td>8</td><td>10</td><td>10</td><td>8</td><td>7</td><td>10</td><td>9</td><td>7</td><td>1</td><td>malignant</td></tr>\n",
+              "</tbody>\n",
+              "</table>\n"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "id": "fTTJ3RTXabgZ",
+        "outputId": "422feaf3-a4f8-48c9-f270-a7512cd00893"
+      },
+      "source": [
+        "nrow(biopsy)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "[1] 699"
+            ],
+            "text/latex": "699",
+            "text/markdown": "699",
+            "text/html": [
+              "699"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 425
+        },
+        "id": "p5aILGTjahI0",
+        "outputId": "0d18b091-00df-4729-a328-b8e78a5b5f0e"
+      },
+      "source": [
+        "summary(biopsy)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "      ID                  V1               V2               V3        \n",
+              " Length:699         Min.   : 1.000   Min.   : 1.000   Min.   : 1.000  \n",
+              " Class :character   1st Qu.: 2.000   1st Qu.: 1.000   1st Qu.: 1.000  \n",
+              " Mode  :character   Median : 4.000   Median : 1.000   Median : 1.000  \n",
+              "                    Mean   : 4.418   Mean   : 3.134   Mean   : 3.207  \n",
+              "                    3rd Qu.: 6.000   3rd Qu.: 5.000   3rd Qu.: 5.000  \n",
+              "                    Max.   :10.000   Max.   :10.000   Max.   :10.000  \n",
+              "                                                                      \n",
+              "       V4               V5               V6               V7        \n",
+              " Min.   : 1.000   Min.   : 1.000   Min.   : 1.000   Min.   : 1.000  \n",
+              " 1st Qu.: 1.000   1st Qu.: 2.000   1st Qu.: 1.000   1st Qu.: 2.000  \n",
+              " Median : 1.000   Median : 2.000   Median : 1.000   Median : 3.000  \n",
+              " Mean   : 2.807   Mean   : 3.216   Mean   : 3.545   Mean   : 3.438  \n",
+              " 3rd Qu.: 4.000   3rd Qu.: 4.000   3rd Qu.: 6.000   3rd Qu.: 5.000  \n",
+              " Max.   :10.000   Max.   :10.000   Max.   :10.000   Max.   :10.000  \n",
+              "                                   NA's   :16                       \n",
+              "       V8               V9               class    \n",
+              " Min.   : 1.000   Min.   : 1.000   benign   :458  \n",
+              " 1st Qu.: 1.000   1st Qu.: 1.000   malignant:241  \n",
+              " Median : 1.000   Median : 1.000                  \n",
+              " Mean   : 2.867   Mean   : 1.589                  \n",
+              " 3rd Qu.: 4.000   3rd Qu.: 1.000                  \n",
+              " Max.   :10.000   Max.   :10.000                  \n",
+              "                                                  "
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 2005
+        },
+        "id": "R1bW7VAGcgdr",
+        "outputId": "a3c0b0a4-6fe5-41e6-bfb7-49218b712ec0"
+      },
+      "source": [
+        "biopsy['V6']"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "    V6\n",
+              "1    1\n",
+              "2   10\n",
+              "3    2\n",
+              "4    4\n",
+              "5    1\n",
+              "6   10\n",
+              "7   10\n",
+              "8    1\n",
+              "9    1\n",
+              "10   1\n",
+              "11   1\n",
+              "12   1\n",
+              "13   3\n",
+              "14   3\n",
+              "15   9\n",
+              "16   1\n",
+              "17   1\n",
+              "18   1\n",
+              "19  10\n",
+              "20   1\n",
+              "21  10\n",
+              "22   7\n",
+              "23   1\n",
+              "24  NA\n",
+              "25   1\n",
+              "26   7\n",
+              "27   1\n",
+              "28   1\n",
+              "29   1\n",
+              "30   1\n",
+              "⋮   ⋮ \n",
+              "670  5\n",
+              "671  8\n",
+              "672  1\n",
+              "673  1\n",
+              "674  1\n",
+              "675  1\n",
+              "676  1\n",
+              "677  1\n",
+              "678  1\n",
+              "679  1\n",
+              "680  1\n",
+              "681 10\n",
+              "682 10\n",
+              "683  1\n",
+              "684  1\n",
+              "685  1\n",
+              "686  1\n",
+              "687  1\n",
+              "688  1\n",
+              "689  1\n",
+              "690  1\n",
+              "691  1\n",
+              "692  5\n",
+              "693  1\n",
+              "694  1\n",
+              "695  2\n",
+              "696  1\n",
+              "697  3\n",
+              "698  4\n",
+              "699  5"
+            ],
+            "text/latex": "A data.frame: 699 × 1\n\\begin{tabular}{r|l}\n  & V6\\\\\n  & <int>\\\\\n\\hline\n\t1 &  1\\\\\n\t2 & 10\\\\\n\t3 &  2\\\\\n\t4 &  4\\\\\n\t5 &  1\\\\\n\t6 & 10\\\\\n\t7 & 10\\\\\n\t8 &  1\\\\\n\t9 &  1\\\\\n\t10 &  1\\\\\n\t11 &  1\\\\\n\t12 &  1\\\\\n\t13 &  3\\\\\n\t14 &  3\\\\\n\t15 &  9\\\\\n\t16 &  1\\\\\n\t17 &  1\\\\\n\t18 &  1\\\\\n\t19 & 10\\\\\n\t20 &  1\\\\\n\t21 & 10\\\\\n\t22 &  7\\\\\n\t23 &  1\\\\\n\t24 & NA\\\\\n\t25 &  1\\\\\n\t26 &  7\\\\\n\t27 &  1\\\\\n\t28 &  1\\\\\n\t29 &  1\\\\\n\t30 &  1\\\\\n\t⋮ & ⋮\\\\\n\t670 &  5\\\\\n\t671 &  8\\\\\n\t672 &  1\\\\\n\t673 &  1\\\\\n\t674 &  1\\\\\n\t675 &  1\\\\\n\t676 &  1\\\\\n\t677 &  1\\\\\n\t678 &  1\\\\\n\t679 &  1\\\\\n\t680 &  1\\\\\n\t681 & 10\\\\\n\t682 & 10\\\\\n\t683 &  1\\\\\n\t684 &  1\\\\\n\t685 &  1\\\\\n\t686 &  1\\\\\n\t687 &  1\\\\\n\t688 &  1\\\\\n\t689 &  1\\\\\n\t690 &  1\\\\\n\t691 &  1\\\\\n\t692 &  5\\\\\n\t693 &  1\\\\\n\t694 &  1\\\\\n\t695 &  2\\\\\n\t696 &  1\\\\\n\t697 &  3\\\\\n\t698 &  4\\\\\n\t699 &  5\\\\\n\\end{tabular}\n",
+            "text/markdown": "\nA data.frame: 699 × 1\n\n| <!--/--> | V6 &lt;int&gt; |\n|---|---|\n| 1 |  1 |\n| 2 | 10 |\n| 3 |  2 |\n| 4 |  4 |\n| 5 |  1 |\n| 6 | 10 |\n| 7 | 10 |\n| 8 |  1 |\n| 9 |  1 |\n| 10 |  1 |\n| 11 |  1 |\n| 12 |  1 |\n| 13 |  3 |\n| 14 |  3 |\n| 15 |  9 |\n| 16 |  1 |\n| 17 |  1 |\n| 18 |  1 |\n| 19 | 10 |\n| 20 |  1 |\n| 21 | 10 |\n| 22 |  7 |\n| 23 |  1 |\n| 24 | NA |\n| 25 |  1 |\n| 26 |  7 |\n| 27 |  1 |\n| 28 |  1 |\n| 29 |  1 |\n| 30 |  1 |\n| ⋮ | ⋮ |\n| 670 |  5 |\n| 671 |  8 |\n| 672 |  1 |\n| 673 |  1 |\n| 674 |  1 |\n| 675 |  1 |\n| 676 |  1 |\n| 677 |  1 |\n| 678 |  1 |\n| 679 |  1 |\n| 680 |  1 |\n| 681 | 10 |\n| 682 | 10 |\n| 683 |  1 |\n| 684 |  1 |\n| 685 |  1 |\n| 686 |  1 |\n| 687 |  1 |\n| 688 |  1 |\n| 689 |  1 |\n| 690 |  1 |\n| 691 |  1 |\n| 692 |  5 |\n| 693 |  1 |\n| 694 |  1 |\n| 695 |  2 |\n| 696 |  1 |\n| 697 |  3 |\n| 698 |  4 |\n| 699 |  5 |\n\n",
+            "text/html": [
+              "<table class=\"dataframe\">\n",
+              "<caption>A data.frame: 699 × 1</caption>\n",
+              "<thead>\n",
+              "\t<tr><th></th><th scope=col>V6</th></tr>\n",
+              "\t<tr><th></th><th scope=col>&lt;int&gt;</th></tr>\n",
+              "</thead>\n",
+              "<tbody>\n",
+              "\t<tr><th scope=row>1</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>2</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>3</th><td> 2</td></tr>\n",
+              "\t<tr><th scope=row>4</th><td> 4</td></tr>\n",
+              "\t<tr><th scope=row>5</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>6</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>7</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>8</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>9</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>10</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>11</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>12</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>13</th><td> 3</td></tr>\n",
+              "\t<tr><th scope=row>14</th><td> 3</td></tr>\n",
+              "\t<tr><th scope=row>15</th><td> 9</td></tr>\n",
+              "\t<tr><th scope=row>16</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>17</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>18</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>19</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>20</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>21</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>22</th><td> 7</td></tr>\n",
+              "\t<tr><th scope=row>23</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>24</th><td>NA</td></tr>\n",
+              "\t<tr><th scope=row>25</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>26</th><td> 7</td></tr>\n",
+              "\t<tr><th scope=row>27</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>28</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>29</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>30</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>⋮</th><td>⋮</td></tr>\n",
+              "\t<tr><th scope=row>670</th><td> 5</td></tr>\n",
+              "\t<tr><th scope=row>671</th><td> 8</td></tr>\n",
+              "\t<tr><th scope=row>672</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>673</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>674</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>675</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>676</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>677</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>678</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>679</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>680</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>681</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>682</th><td>10</td></tr>\n",
+              "\t<tr><th scope=row>683</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>684</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>685</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>686</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>687</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>688</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>689</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>690</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>691</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>692</th><td> 5</td></tr>\n",
+              "\t<tr><th scope=row>693</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>694</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>695</th><td> 2</td></tr>\n",
+              "\t<tr><th scope=row>696</th><td> 1</td></tr>\n",
+              "\t<tr><th scope=row>697</th><td> 3</td></tr>\n",
+              "\t<tr><th scope=row>698</th><td> 4</td></tr>\n",
+              "\t<tr><th scope=row>699</th><td> 5</td></tr>\n",
+              "</tbody>\n",
+              "</table>\n"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "0SlElIAAcbdR"
+      },
+      "source": [
+        "biopsy_sem_NA_nas_Colunas = biopsy<- na.omit(biopsy, 7)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Px3hBVcSe2AE"
+      },
+      "source": [
+        "biopsy_sem_NA_nas_Linhas = biopsy<- na.omit(biopsy, 7:24)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "id": "mqMvYsS1ZBgN",
+        "outputId": "c54fcfef-cefb-4c86-b764-d1f69c00bbae"
+      },
+      "source": [
+        "nrow(biopsy_sem_NA_nas_Linhas)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "[1] 683"
+            ],
+            "text/latex": "683",
+            "text/markdown": "683",
+            "text/html": [
+              "683"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "nZnvTIKIi1EZ"
+      },
+      "source": [
+        "**Treinamento conjunto: biopsy_sem_NA_nas_Colunas**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "9hM5epaKg6pu"
+      },
+      "source": [
+        "L = sample(1:nrow(biopsy_sem_NA_nas_Colunas),round(nrow(biopsy_sem_NA_nas_Colunas)/3))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "vEailKRjhpMB"
+      },
+      "source": [
+        "test = biopsy_sem_NA_nas_Colunas[L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "swCnbYyth1-i"
+      },
+      "source": [
+        "trains = biopsy_sem_NA_nas_Colunas[ -L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "evO2NPAdiKFP"
+      },
+      "source": [
+        "cl= biopsy [ -L, 11]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "KfGZrf_fiQXA"
+      },
+      "source": [
+        "fit= knn (trains, test, cl, k= 11)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gu9qfRs7iSz5",
+        "outputId": "b972f3cd-8e2d-4fe2-edb4-e2adbd587d26"
+      },
+      "source": [
+        "c_matrix= table(biopsy_sem_NA_nas_Colunas[L,]$class, fit)\n",
+        "print(c_matrix)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "           fit\n",
+            "            benign malignant\n",
+            "  benign       131        12\n",
+            "  malignant     66        19\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BKHzXv7GidJG",
+        "outputId": "a72c01a1-8743-4926-9a8e-047e2dcfca93"
+      },
+      "source": [
+        "print(sum(diag(c_matrix))/sum(c_matrix))"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[1] 0.6578947\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "HtRz4MIokQNx"
+      },
+      "source": [
+        "**Treinamento conjunto: biopsy_sem_NA_nas_Linhas**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "8Q6mArQAkgQ5"
+      },
+      "source": [
+        "L = sample(1:nrow(biopsy_sem_NA_nas_Linhas),round(nrow(biopsy_sem_NA_nas_Linhas)/3))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "2MI5QZaDkpsM"
+      },
+      "source": [
+        "test = biopsy_sem_NA_nas_Linhas[L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "lJ_1q3gOksOR"
+      },
+      "source": [
+        "trains = biopsy_sem_NA_nas_Linhas[ -L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "hMDRP0f9kwsf"
+      },
+      "source": [
+        "cl= biopsy [ -L, 11]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "hm5dLKmdkzVl"
+      },
+      "source": [
+        "fit= knn (trains, test, cl, k= 11)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "yC_0o1-Rk1fe",
+        "outputId": "f28e2fb3-f565-429f-c1a6-3e6e1abf3d23"
+      },
+      "source": [
+        "c_matrix= table(biopsy_sem_NA_nas_Colunas[L,]$class, fit)\n",
+        "print(c_matrix)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "           fit\n",
+            "            benign malignant\n",
+            "  benign       118        25\n",
+            "  malignant     62        23\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rVBlB3uXk96k",
+        "outputId": "f7d45e9b-0b1d-46dc-fee3-f0536ee0faf9"
+      },
+      "source": [
+        "print(sum(diag(c_matrix))/sum(c_matrix))"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[1] 0.6184211\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "t8-d0C-PlcYk"
+      },
+      "source": [
+        "**Média de 100 diferentes execuções**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "pfuXxqLeaQ1Q",
+        "outputId": "afea3e56-51b9-4801-da69-e9f3311e26ea"
+      },
+      "source": [
+        "install.packages(\"class\")"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "Installing package into ‘/usr/local/lib/R/site-library’\n",
+            "(as ‘lib’ is unspecified)\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "JsO92DvXaT81"
+      },
+      "source": [
+        "library(\"class\")"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "ShqYvpkodLr1"
+      },
+      "source": [
+        "**Sem as Colunas**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "xgIWL2ZcsX0N"
+      },
+      "source": [
+        "#Desconsiderando o atributo (coluna) ID, pois, é um atributo identificador\n",
+        "biopsy_sem_coluna_ID_e_V6= biopsy_sem_NA_nas_Colunas[ , -1]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "9q6ayFDnlhhQ"
+      },
+      "source": [
+        "acc = c(1:100)*0"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Bx18dNnhsz4e"
+      },
+      "source": [
+        "L = sample(1:nrow(biopsy_sem_coluna_ID_e_V6),round(nrow(biopsy_sem_coluna_ID_e_V6)/3))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "9KxlQPTbl0Xv"
+      },
+      "source": [
+        "test = biopsy_sem_coluna_ID_e_V6[L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "zVdaW3M2arRW"
+      },
+      "source": [
+        "trains = biopsy_sem_coluna_ID_e_V6[ -L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "x6OIOv_8auvv"
+      },
+      "source": [
+        "cl= biopsy [ -L, 11]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "fxXHpn9sa7wG"
+      },
+      "source": [
+        "fit= knn (trains, test, cl, k= 5)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Ve-O_FvcbCUg",
+        "outputId": "bc5af949-cb25-4d12-e631-465ea07a4713"
+      },
+      "source": [
+        "c_matrix= table(biopsy_sem_coluna_ID_e_V6[L,]$class, fit)\n",
+        "print(c_matrix)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "           fit\n",
+            "            benign malignant\n",
+            "  benign       140         8\n",
+            "  malignant      1        79\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OnBjR_O9bTIB",
+        "outputId": "1420939a-44a2-4433-8bf4-554150a8f368"
+      },
+      "source": [
+        "cat('Accuracy: ' , sum(diag(c_matrix))/sum(c_matrix)*100 , '%')"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Accuracy:  96.05263 %"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "id": "A9vzbvtPm9_Q",
+        "outputId": "be1b9e23-bca9-4cc2-d774-6f58451b2b94"
+      },
+      "source": [
+        "mean(acc)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "[1] 0"
+            ],
+            "text/latex": "0",
+            "text/markdown": "0",
+            "text/html": [
+              "0"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "PdVCVIJIdn_s"
+      },
+      "source": [
+        "**Sem as Linhas**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "XxX7NHmVdqER"
+      },
+      "source": [
+        "biopsy_sem_coluna_ID_e_Linhas= biopsy_sem_NA_nas_Linhas[ , -1]\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "yTmVNHa5d0Zz"
+      },
+      "source": [
+        "acc = c(1:100)*0"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "MyGnhkcUd5sX"
+      },
+      "source": [
+        "L = sample(1:nrow(biopsy_sem_coluna_ID_e_Linhas),round(nrow(biopsy_sem_coluna_ID_e_Linhas)/3))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "5_1pWNSfd76U"
+      },
+      "source": [
+        "test = biopsy_sem_coluna_ID_e_Linhas[L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "AfHa9wf_d_l2"
+      },
+      "source": [
+        "trains = biopsy_sem_coluna_ID_e_Linhas[ -L,1:8]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Y5W3I7iMeBkx"
+      },
+      "source": [
+        "cl= biopsy [ -L, 11]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "R24SkXXseDqC"
+      },
+      "source": [
+        "fit= knn (trains, test, cl, k= 12)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "zsnAYf3OeFmD",
+        "outputId": "1715012e-3601-4d00-e045-cbb3bbdae6e4"
+      },
+      "source": [
+        "c_matrix= table(biopsy_sem_coluna_ID_e_Linhas[L,]$class, fit)\n",
+        "print(c_matrix)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "           fit\n",
+            "            benign malignant\n",
+            "  benign       147         2\n",
+            "  malignant      4        75\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "73UQ-AAWeHzm",
+        "outputId": "38c5e8f5-601c-407d-9e9d-474d86a3e355"
+      },
+      "source": [
+        "cat('Accuracy: ' , sum(diag(c_matrix))/sum(c_matrix)*100 , '%')"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Accuracy:  97.36842 %"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "id": "pIrM9ezoeVem",
+        "outputId": "8a830bdb-0934-4c0b-bcfd-9a7fc51fe778"
+      },
+      "source": [
+        "mean(acc)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "[1] 0"
+            ],
+            "text/latex": "0",
+            "text/markdown": "0",
+            "text/html": [
+              "0"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    }
+  ]
+}
